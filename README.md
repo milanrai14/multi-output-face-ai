@@ -1,6 +1,6 @@
 # multi-output-face-ai
 
-Multi-output CNN for simultaneous **age prediction** (regression) and **gender classification** from a single face image. Built with a **ResNet50** backbone (transfer learning) and the **Keras Functional API**, and deployed as a REST API using **FastAPI**.
+Multi-output CNN for simultaneous **age prediction** (regression) and **gender classification** from a single face image. Built with a **VGG16** backbone (transfer learning) and the **Keras Functional API**, and deployed as a REST API using **FastAPI**.
 
 ---
 
@@ -11,7 +11,7 @@ This project demonstrates a **multi-task deep learning model** that takes one fa
 - **Age** — predicted as a continuous number (regression)
 - **Gender** — predicted as Male/Female (binary classification)
 
-Rather than training two separate models, both tasks share the same **ResNet50** feature extractor, then branch into two independent output heads. This architecture — one input, multiple outputs, shared weights — is only possible using the **Keras Functional API** (not `Sequential`).
+Rather than training two separate models, both tasks share the same **VGG16** feature extractor, then branch into two independent output heads. This architecture — one input, multiple outputs, shared weights — is only possible using the **Keras Functional API** (not `Sequential`).
 
 ---
 
@@ -21,7 +21,7 @@ Rather than training two separate models, both tasks share the same **ResNet50**
      Input 
         │
         ▼
-   ResNet50 (pretrained on ImageNet, frozen/fine-tuned)
+   VGG16 (pretrained on ImageNet, frozen/fine-tuned)
         │
         ▼
   GlobalAveragePooling2D
@@ -40,10 +40,10 @@ Age Head   Gender Head
 ```
 
 **Key design choices:**
-- **ResNet50 backbone** — pretrained on ImageNet, used as a fixed/fine-tuned feature extractor instead of training a CNN from scratch. Gives much stronger performance on a modest dataset like UTKFace.
+- **VGG16 backbone** — pretrained on ImageNet, used as a fixed/fine-tuned feature extractor instead of training a CNN from scratch. Gives much stronger performance on a modest dataset like UTKFace.
 - **Shared trunk, two heads** — one backbone learns general facial features useful for both tasks, reducing redundancy and overfitting compared to training two separate networks.
 - **GlobalAveragePooling2D** instead of `Flatten()` — standard practice with pretrained backbones, reduces parameters and overfitting risk.
-- **Two-phase training** — first train the new heads with ResNet50 frozen, then unfreeze and fine-tune the whole network at a very low learning rate.
+- **Two-phase training** — first train the new heads with VGG16 frozen, then unfreeze and fine-tune the whole network at a very low learning rate.
 
 ---
 
@@ -52,7 +52,7 @@ Age Head   Gender Head
 **[UTKFace](https://susanqq.github.io/UTKFace/)** — ~20,000 face images labeled with age, gender, and ethnicity directly in the filename (e.g. `25_0_0_20170116174525125.jpg` → age=25, gender=0/male).
 
 - No separate label file needed — labels are parsed from filenames.
-- Images are resized to `224x224` and preprocessed with `resnet50.preprocess_input` before training.
+- Images are resized to `224x224` and preprocessed with `VGG16.preprocess_input` before training.
 
 
 
@@ -64,7 +64,7 @@ Age Head   Gender Head
 
 | Component | Tool |
 |---|---|
-| Model backbone | ResNet50 (Keras Applications) |
+| Model backbone | VGG16 (Keras Applications) |
 | Architecture | Keras Functional API |
 | Training environment | Google Colab (GPU) |
 | Data processing | OpenCV, NumPy, scikit-learn |
@@ -123,7 +123,7 @@ This project is open-sourced under the MIT License. See [`LICENSE`](LICENSE) for
 ## 🙏 Acknowledgements
 
 - [UTKFace Dataset](https://susanqq.github.io/UTKFace/)
-- [Keras Applications — ResNet50](https://keras.io/api/applications/resnet/)
+- [Keras Applications — VGG16](https://keras.io/api/applications/resnet/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 
 

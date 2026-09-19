@@ -319,30 +319,6 @@ Future improvements could include:
 
 ---
 
-## 📁 Project Structure
-
-A possible project structure is:
-
-```text
-multi-output-face-ai/
-│
-├── notebook/
-│   └── multi_output_face_ai.ipynb
-│
-├── FastAPI/
-│   ├── main.py
-│   ├── requirements.txt
-│   └── model/
-│       └── multi_output_face_model.keras
-│
-├── test_images/
-│   └── test_face.jpg
-│
-├── .gitignore
-├── LICENSE
-└── README.md
-```
-
 > Dataset files and large trained model files should generally not be committed directly to GitHub.
 
 ---
